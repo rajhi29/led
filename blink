@@ -1,0 +1,53 @@
+echo "# led" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/rajhi29/led.git
+git push -u origin main
+const int sensorPin = A0;  // LM35 sensor connected to analog pin A0
+const int ledPin = 13;     // Onboard LED connected to digital pin 13
+
+float temperature = 0;     // Variable to store temperature readings
+bool isHighTemp = false;   // Flag to track temperature condition
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  Serial.begin(9600);  // Initialize serial communication for debugging
+}
+
+void loop() {
+  int sensorValue = analogRead(sensorPin);
+  temperature = (sensorValue * 5.0 * 100.0) / 1024.0; // Convert sensor value to temperature in Celsius
+  Serial.print("Temperature: ");
+  Serial.print(temperature);
+  Serial.println(" °C");
+
+  if (temperature < 30 && !isHighTemp) {
+    toggleLED(250);  // Blink LED every 250 milliseconds for low temperature
+  } else if (temperature >= 30 && !isHighTemp) {
+    isHighTemp = true;  // Temperature is above 30°C
+  }
+
+  if (isHighTemp && temperature >= 30) {
+    toggleLED(500);  // Blink LED every 500 milliseconds for high temperature
+  } else if (isHighTemp && temperature < 30) {
+    isHighTemp = false;  // Temperature dropped below 30°C
+  }
+}
+
+void toggleLED(unsigned long interval) {
+  static unsigned long previousMillis = 0;
+  static bool ledState = LOW;
+  unsigned long currentMillis = micros();
+
+  if (currentMillis - previousMillis >= interval * 1000) {
+    previousMillis = currentMillis;
+    if (ledState == LOW) {
+      ledState = HIGH;
+    } else {
+      ledState = LOW;
+    }
+    digitalWrite(ledPin, ledState);
+  }
+}
