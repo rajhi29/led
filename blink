@@ -1,8 +1,8 @@
 const int lm35Pin = A0;  // LM35 sensor connected to analog pin A0
 const int ledPin = 13;   // Onboard LED connected to digital pin 13
 
-int previousState = 0;   // Previous state to track changes in temperature conditions
-bool ledState = LOW;     // Variable to store LED state
+int previousState = 0;  // Variable to track previous temperature state
+bool ledState = LOW;    // Variable to store LED state
 
 void setup() {
   pinMode(ledPin, OUTPUT);
@@ -18,7 +18,7 @@ void loop() {
   Serial.print("Temperature (Celsius): ");
   Serial.println(tempCelsius);
 
-  int currentState = 0;  // Initialize the current state
+  int currentState = 0;  // Initialize current state
 
   // Determine the current state based on the temperature condition
   if (tempCelsius < 30) {
@@ -36,13 +36,13 @@ void loop() {
 
   // Control LED based on the state
   if (currentState == 1) {  // Temperature below 30 degrees Celsius
-    if (millis() % 500 < 250) {  // Alternating LED state within 250ms
+    if (analogRead(A0) % 500 < 250) {  // Alternating LED state within 250ms
       ledState = HIGH;
     } else {
       ledState = LOW;
     }
   } else if (currentState == 2) {  // Temperature above or equal to 30 degrees Celsius
-    if (millis() % 1000 < 500) {  // Alternating LED state within 500ms
+    if (analogRead(A0) % 1000 < 500) {  // Alternating LED state within 500ms
       ledState = HIGH;
     } else {
       ledState = LOW;
