@@ -1,10 +1,4 @@
-echo "# led" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/rajhi29/led.git
-git push -u origin main
+
 const int sensorPin = A0;  // LM35 sensor connected to analog pin A0
 const int ledPin = 13;     // Onboard LED connected to digital pin 13
 
